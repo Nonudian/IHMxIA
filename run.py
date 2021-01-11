@@ -62,7 +62,9 @@ def run():
             state = state.astype(np.int8)
 
             nb = len(imgs)
-
+            print(grads[0])
+            grads = np.where(grads >= 0, grads, 0)
+            print(grads[0])
             saliency = Image.fromarray(grads, 'L')
             saliency.save("images/saliency_" + str(nb) + ".jpg")
 
