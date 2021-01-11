@@ -69,8 +69,9 @@ class DQNAgent:
 
         grads -= grads.min()
         grads /= grads.max()
-
         grads *= 254
         grads = grads.astype(np.int8)
+
+        state.detach_().squeeze_()
 
         return action, grads.transpose((1, 0))
