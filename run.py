@@ -75,7 +75,7 @@ def run():
 
             imgs.append(merge_img(state, grads, nb))
 
-    make_movie(imgs, "video/video_" + str(epoch + 1) + ".mp4")
+    make_movie(imgs, "video/video_q2_" + str(epoch + 1) + ".mp4")
 
 
 def make_movie(imgs, filename):
