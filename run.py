@@ -10,6 +10,8 @@ from moviepy.editor import ImageSequenceClip
 
 import umap
 
+from utils import embedding2csv
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -43,6 +45,7 @@ def parsearg():
 
 def run():
     print("Making videos")
+    actions_chosen = []
     for epoch in range(args.n_epochs):
         env.game.new_episode()
         print("\nEpisode %d\n-------" % (epoch + 1))
@@ -53,6 +56,7 @@ def run():
 
             # TODO: Change this function to return a correct grad
             best_action_index, grads = agent.get_best_action_wGrad(state)
+            actions_chosen.append(agent.actions[best_action_index])
 
             env.game.make_action(agent.actions[best_action_index], args.frame_repeat)
             state = np.squeeze(state)
@@ -62,9 +66,9 @@ def run():
             state = state.astype(np.int8)
 
             nb = len(imgs)
-            print(grads[0])
+            #print(grads[0])
             grads = np.where(grads >= 0, grads, 0)
-            print(grads[0])
+            #print(grads[0])
             saliency = Image.fromarray(grads, 'L')
             saliency.save("images/saliency_" + str(nb) + ".jpg")
 
@@ -74,6 +78,12 @@ def run():
             # grads =  format_saliency_bprop(img)
 
             imgs.append(merge_img(state, grads, nb))
+
+    # umap embedding
+    embedding = umap.UMAP(n_neighbors=5,
+                          min_dist=0.3,
+                          metric='correlation').fit_transform(agent.mydata)
+    embedding2csv(embedding, actions_chosen)
 
     make_movie(imgs, "video/video_q2_" + str(epoch + 1) + ".mp4")
 
