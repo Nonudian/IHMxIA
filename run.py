@@ -24,7 +24,7 @@ def parsearg():
     parser.add_argument('--scenario', type=str, default="basic", help='vizdoom scenario')
     parser.add_argument('--test_mod', type=bool, default=False, help=' test or train model')
 
-    parser.add_argument('--n_epochs', type=int, default=1, help='number of epochs of training')
+    parser.add_argument('--n_epochs', type=int, default=1000, help='number of epochs of training')
     parser.add_argument('--learning_steps_per_epoch', type=int, default=2000, help='number of steps per epoch')
     parser.add_argument('--batch_size', type=int, default=64, help='size of the batches')
     parser.add_argument('--lr', type=float, default=0.00025, help='adam: learning rate')
