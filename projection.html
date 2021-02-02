@@ -5,7 +5,7 @@
     <title>Title</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
 
-    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 
 </head>
 <body style="text-align: center">
@@ -47,11 +47,10 @@
 
 
     async function plot(svg, data) {
-        let [x, y] = await new Promise(res => res(get_scales(data.map(d => [d["x"], d["y"]]))));
-
+        let [x, y] = await new Promise(res => res(get_scales(data.map(d => [parseFloat(d["x"]), parseFloat(d["y"])]))));
 
         let colScale = function (d) {
-            return "steelblue"
+            return d3.color(d3.schemeCategory10[d])
         }
 
         if (data[0]["args"]) {
@@ -75,11 +74,8 @@
             .append("circle")
             .attr("class", "point")
             .attr("r", 6)
-            .attr("cx", d => {
-                console.log(d);
-                console.log(d["x"]);
-                return x(d["x"])})
-            .attr("cy", d => y(d['y']))
+            .attr("cx", d => x(d["x"]))
+            .attr("cy", d => y(d["y"]))
             .attr("fill", d => colScale(d["arg"]))
             .attr("stroke", "rgba(19,19,19,0.51)")
             .attr("stroke-width", "1")
